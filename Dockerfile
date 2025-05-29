@@ -1,35 +1,30 @@
 FROM ghcr.io/open-webui/open-webui:main
 
-# Install required packages: Node.js, npm, Python build tools, tini
 RUN apt update && \
     apt upgrade -y && \
-    apt install -y curl python3-pip python3-venv git tini && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt install -y nodejs && \
+    apt install -y curl nodejs npm tini && \
     rm -rf /var/lib/apt/lists/* && \
     apt clean
 
-WORKDIR /app
+WORKDIR /dhp-open-webui
 
-# Copy frontend and backend source code
+# Copy frontend and backend code
 COPY frontend/ ./frontend/
 COPY backend/ ./backend/
 
 # Build frontend
-WORKDIR /app/frontend
+WORKDIR /dhp-open-webui/frontend
 RUN npm install && npm run build
 
 # Install backend dependencies
-WORKDIR /app/backend
+WORKDIR /dhp-open-webui/backend
 RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Expose ports: 8080 for OpenWebUI, 8081 for FastAPI backend
 EXPOSE 8080 8081
 
-# Copy the startup script
-COPY start.sh /app/start.sh
-RUN chmod +x /app/start.sh
+# Copy your custom start script
+COPY my_start.sh /dhp-open-webui/my_start.sh
+RUN chmod +x /dhp-open-webui/my_start.sh
 
-# Use tini as init system and run the startup script
 ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["/app/start.sh"]
+CMD ["/dhp-open-webui/my_start.sh"]
