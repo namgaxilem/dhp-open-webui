@@ -1,0 +1,5 @@
+.testcmd
+backend/data
+
+__pycache__
+.venv
