@@ -9,8 +9,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/dhp-ai-agent" element={<LandingPage />} />
+        <Route path="/about" element={<App />} />
+        <Route path="/about/about" element={<LandingPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
